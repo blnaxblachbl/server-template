@@ -4,11 +4,9 @@ import { Request, Response } from "express";
 import { prisma } from "#utils/prisma";
 import { Verify } from "#utils/token/types";
 import { verifyAccessToken } from "#utils/token/verify";
-import { elasticSearch } from "./elastic";
 
 export type Context = {
   prisma: typeof prisma;
-  elasticSearch: typeof elasticSearch;
   req: Request;
   res: Response;
   apiKey: string | undefined;
@@ -30,7 +28,6 @@ export const createContext = ({
 
   return Promise.resolve({
     prisma,
-    elasticSearch,
     req,
     res,
     apiKey,

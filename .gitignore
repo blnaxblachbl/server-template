@@ -4,3 +4,4 @@ node_modules
 !.env.example
 *.crt
 .DS_Store*
+src/utils/prisma/generated

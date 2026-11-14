@@ -5,7 +5,6 @@ import type { AllTokens, Verify } from "./types";
 
 export function generateAccessToken(data: Verify): string {
   const accessToken: string = jwt.sign(data, ENV.ACCESS_TOKEN_SECRET, {
-    // expiresIn: "5m",
     expiresIn: ENV.IS_DEV ? "1h" : "5m",
   });
   return accessToken;

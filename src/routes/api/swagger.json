@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "CRUD API",
+    "title": "Template API",
     "version": "1.0.0",
-    "description": "CRUD API endpoints"
+    "description": "Products and access management system endpoints"
   },
   "servers": [
     {
@@ -14,5 +14,33 @@
       "url": "/",
       "description": "Current domain"
     }
-  ]
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Standard JWT Bearer token authentication header: `Authorization: Bearer <token>`"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API Key authentication header: `x-api-key: <uuid>`"
+      }
+    },
+    "schemas": {
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Error message description"
+          }
+        }
+      }
+    }
+  }
 }
