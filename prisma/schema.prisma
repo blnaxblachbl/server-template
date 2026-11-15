@@ -19,17 +19,3 @@ model User {
   name      String
   password  String
 }
-
-model ApiKey {
-  // default
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  deleted   Boolean  @default(false)
-  // fields
-  key       String   @unique @default(dbgenerated("uuidv7()")) @db.Uuid
-  name      String
-  expiredAt DateTime
-
-  @@index([key])
-}
