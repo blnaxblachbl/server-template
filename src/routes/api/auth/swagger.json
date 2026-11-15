@@ -72,6 +72,22 @@
         }
       }
     },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User logout",
+        "description": "Invalidate User session.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/api/auth/refresh-token": {
       "post": {
         "tags": ["User"],

@@ -1,11 +1,13 @@
 import { findUsers } from "./queries/findUsers";
 import { findOneUser } from "./queries/findOneUser";
+import { findMe } from "./queries/findMe";
+
 import { loginUser } from "./mutations/loginUser";
 import { createUser } from "./mutations/createUser";
 import { updateUser } from "./mutations/updateUser";
 import { refreshToken } from "./mutations/refreshToken";
 import { deleteUser } from "./mutations/deleteUser";
-import { findMe } from "./queries/findMe";
+import { logoutUser } from "./mutations/logout";
 
 import { UserResolvers } from "../types";
 
@@ -21,5 +23,6 @@ export default {
     updateUser,
     refreshToken,
     deleteUser,
+    logoutUser,
   },
 } as UserResolvers;

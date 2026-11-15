@@ -13,6 +13,7 @@ export type UserResolvers = {
     loginUser: Resolver<null, LoginUserArgs, LoginUserResult>;
     refreshToken: Resolver<null, RefreshTokenArgs, LoginUserResult>;
     deleteUser: ShieldedResolver<null, DeleteUserArgs, User>;
+    logoutUser: ShieldedResolver<null, null, Boolean>;
   };
 };
 type FindMeArgs = {

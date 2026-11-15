@@ -15,5 +15,6 @@ export const userPermissions: UserPermissions = {
     deleteUser: rules.isAuthorized,
     refreshToken: allow,
     loginUser: allow,
+    logoutUser: allow,
   },
 };

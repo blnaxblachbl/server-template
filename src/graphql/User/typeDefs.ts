@@ -26,6 +26,7 @@ export default gql`
     createUser(data: CreateUserInput!): User!
     updateUser(id: Int!, data: UpdateUserInput!): User!
     loginUser(data: LoginUserInput!): LoginUserResult!
+    logoutUser: Boolean!
     refreshToken(data: RefreshTokenInput): LoginUserResult!
     deleteUser(id: Int!): User!
   }
