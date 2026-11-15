@@ -8,6 +8,7 @@ import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+import session from "express-session";
 
 import typeDefs from "#graphql/typeDefs";
 import resolvers from "#graphql/resolvers";
@@ -46,10 +47,25 @@ import { ENV } from "#utils/config";
       origin: ENV.CORS,
     }),
   );
+  app.use(express.json());
+  app.use(
+    session({
+      secret: ENV.SESSION_TOKEN_SECRET,
+      saveUninitialized: false,
+      cookie: function (req) {
+        return {
+          path: "/",
+          httpOnly: true,
+          secure: req.secure || false,
+          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, as refreshToken
+        };
+      },
+    }),
+  );
+
   if (ENV.GRAPHQL_API_ENABLED) {
     app.use(
       ENV.GRAPHQL_API_PATH,
-      express.json(),
       expressMiddleware(server, {
         context: createContext,
       }),
@@ -57,7 +73,7 @@ import { ENV } from "#utils/config";
   }
 
   if (ENV.REST_API_ENABLED) {
-    app.use(ENV.REST_API_PATH, express.json(), apiRouter);
+    app.use(ENV.REST_API_PATH, apiRouter);
   }
 
   app.use("/*splat", (_, res) => {

@@ -7,7 +7,7 @@ import { UserResolvers } from "#graphql/User/types";
 export const loginUser: UserResolvers["Mutation"]["loginUser"] = async (
   _,
   { data, select },
-  { prisma },
+  { prisma, req },
 ) => {
   const user = await prisma.user
     .findUnique({
@@ -35,6 +35,10 @@ export const loginUser: UserResolvers["Mutation"]["loginUser"] = async (
     id: user.id,
     email: user.email,
   });
+
+  req.session.accessToken = accessToken;
+  req.session.refreshToken = refreshToken;
+  req.session.save();
 
   return { user, accessToken, refreshToken };
 };

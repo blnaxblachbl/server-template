@@ -3,7 +3,7 @@
   "info": {
     "title": "Template API",
     "version": "1.0.0",
-    "description": "Products and access management system endpoints"
+    "description": "Template endpoints"
   },
   "servers": [
     {

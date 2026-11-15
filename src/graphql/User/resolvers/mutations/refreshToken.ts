@@ -8,12 +8,16 @@ import { UserResolvers } from "#graphql/User/types";
 export const refreshToken: UserResolvers["Mutation"]["refreshToken"] = async (
   _,
   { data, select },
-  { prisma, verify },
+  { prisma, verify, refreshToken: rToken, req },
 ) => {
   if (!verify) {
-    throw new Error("Access token is reqired");
+    throw new Error("Unauthorized");
   }
-  const tokenData = verifyRefreshToken(data.refreshToken);
+  const token = data?.refreshToken || rToken;
+  if (!token) {
+    throw new Error("Refresh token is not provided");
+  }
+  const tokenData = verifyRefreshToken(token);
   if (!tokenData || verify.id !== tokenData.id) {
     throw new Error("Invalid refresh token");
   }
@@ -32,5 +36,10 @@ export const refreshToken: UserResolvers["Mutation"]["refreshToken"] = async (
     id: user.id,
     email: user.email,
   });
+
+  req.session.accessToken = accessToken;
+  req.session.refreshToken = refreshToken;
+  req.session.save();
+
   return { user, accessToken, refreshToken };
 };

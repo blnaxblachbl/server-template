@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import { z } from "zod";
 
 import { createContext } from "#utils/context";
 import { USER_FIELDS } from "#utils/constants";
@@ -35,6 +34,11 @@ export async function loginUser(
       id: userData.id,
       email: userData.email,
     });
+
+    req.session.accessToken = accessToken;
+    req.session.refreshToken = refreshToken;
+    req.session.save();
+
     return res.json({ user: userData, accessToken, refreshToken });
   } catch (e) {
     console.error(e);

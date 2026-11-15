@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import z from "zod";
 
 import { createContext } from "#utils/context";
 import { generateAllTokens } from "#utils/token/generate";
@@ -8,15 +7,18 @@ import { verifyRefreshToken } from "#utils/token/verify";
 import { refreshTokenSchema } from "#utils/zod-schemas/user";
 
 export async function refreshToken(req: Request, res: Response) {
-  const { prisma, verify } = await createContext({ req, res });
+  const { prisma, verify, refreshToken } = await createContext({ req, res });
   if (!verify) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  const { success, data: body, error } = refreshTokenSchema.safeParse(req.body);
-  if (!success) {
-    return res.status(400).json({ message: error.issues[0].message });
+  const { data: body, error } = refreshTokenSchema.safeParse(req.body);
+  const token = body?.refreshToken ?? refreshToken;
+  if (!token) {
+    return res.status(400).json({
+      message: error?.issues[0].message ?? "Refresh Token not provided",
+    });
   }
-  const refreshTokenVerified = verifyRefreshToken(body.refreshToken);
+  const refreshTokenVerified = verifyRefreshToken(token);
   if (!refreshTokenVerified || verify.id !== refreshTokenVerified.id) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -32,6 +34,10 @@ export async function refreshToken(req: Request, res: Response) {
       id: user.id,
       email: user.email,
     });
+
+    req.session.accessToken = accessToken;
+    req.session.refreshToken = newRefreshToken;
+    req.session.save();
 
     res.json({ user, accessToken, refreshToken: newRefreshToken });
   } catch (e) {

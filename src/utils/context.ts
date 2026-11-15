@@ -11,6 +11,7 @@ export type Context = {
   res: Response;
   apiKey: string | undefined;
   verify: Verify | null;
+  refreshToken?: string;
 };
 
 export const createContext = ({
@@ -19,9 +20,12 @@ export const createContext = ({
 }: ExpressContextFunctionArgument): Promise<Context> => {
   const { authorization } = req.headers;
   const apiKey = req.headers["x-api-key"] as string | undefined;
+  const sessionToken = req.session.accessToken;
   let token = "";
 
-  if (authorization) {
+  if (sessionToken) {
+    token = sessionToken;
+  } else if (authorization) {
     token = authorization.replace("Bearer ", "") || "";
   }
   const verify = verifyAccessToken(token);
@@ -32,5 +36,6 @@ export const createContext = ({
     res,
     apiKey,
     verify,
+    refreshToken: req.session.refreshToken,
   });
 };

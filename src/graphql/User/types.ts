@@ -27,7 +27,7 @@ type FindOneUserArgs = {
   select?: Prisma.UserSelect;
 };
 type RefreshTokenArgs = {
-  data: {
+  data?: {
     refreshToken: string;
   };
   select?: {

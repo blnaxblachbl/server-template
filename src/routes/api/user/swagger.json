@@ -3,12 +3,12 @@
   "info": {
     "title": "Template API - User",
     "version": "0.0.1",
-    "description": "User management and authentication endpoints"
+    "description": "User management endpoints"
   },
   "tags": [
     {
       "name": "User",
-      "description": "User management and authentication"
+      "description": "User management"
     }
   ],
   "paths": {

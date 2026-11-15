@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.3.0",
     "@types/node": "^26.6.3",
@@ -53,6 +54,7 @@
     "dotenv": "^18.0.4",
     "dotenv-expand": "^1000.0.0",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "graphql": "^16.14.2",
     "graphql-middleware": "^6.1.35",
     "graphql-parse-resolve-info": "^4.14.1",
