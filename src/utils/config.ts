@@ -9,7 +9,6 @@ export const ENV = {
   //app
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET!,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET!,
-  SESSION_TOKEN_SECRET: process.env.SESSION_TOKEN_SECRET!,
   IS_DEV: process.env.NODE_ENV === "development",
   CORS: process.env.CORS ? (JSON.parse(process.env.CORS) as string[]) : "*",
   PORT: Number(process.env.PORT ?? "4000"),

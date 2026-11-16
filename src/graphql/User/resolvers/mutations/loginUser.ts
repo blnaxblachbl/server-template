@@ -3,11 +3,13 @@ import { GraphQLError } from "graphql";
 
 import { generateAllTokens } from "#utils/token/generate";
 import { UserResolvers } from "#graphql/User/types";
+import { ENV } from "#utils/config";
+import { setTokens } from "#utils/cookie";
 
 export const loginUser: UserResolvers["Mutation"]["loginUser"] = async (
   _,
   { data, select },
-  { prisma, req },
+  { prisma, req, res },
 ) => {
   const user = await prisma.user
     .findUnique({
@@ -31,14 +33,12 @@ export const loginUser: UserResolvers["Mutation"]["loginUser"] = async (
     throw new GraphQLError("Invalid credentials");
   }
 
-  const { accessToken, refreshToken } = generateAllTokens({
+  const tokens = generateAllTokens({
     id: user.id,
     email: user.email,
   });
 
-  req.session.accessToken = accessToken;
-  req.session.refreshToken = refreshToken;
-  req.session.save();
+  setTokens(req, res, tokens);
 
-  return { user, accessToken, refreshToken };
+  return { user, ...tokens };
 };

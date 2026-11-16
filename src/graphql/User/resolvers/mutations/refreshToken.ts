@@ -4,11 +4,12 @@ import { generateAllTokens } from "#utils/token/generate";
 import { verifyRefreshToken } from "#utils/token/verify";
 
 import { UserResolvers } from "#graphql/User/types";
+import { setTokens } from "#utils/cookie";
 
 export const refreshToken: UserResolvers["Mutation"]["refreshToken"] = async (
   _,
   { data, select },
-  { prisma, verify, refreshToken: rToken, req },
+  { prisma, verify, refreshToken: rToken, req, res },
 ) => {
   if (!verify) {
     throw new Error("Unauthorized");
@@ -32,14 +33,12 @@ export const refreshToken: UserResolvers["Mutation"]["refreshToken"] = async (
   if (!user) {
     throw new GraphQLError("User not found");
   }
-  const { accessToken, refreshToken } = generateAllTokens({
+  const tokens = generateAllTokens({
     id: user.id,
     email: user.email,
   });
 
-  req.session.accessToken = accessToken;
-  req.session.refreshToken = refreshToken;
-  req.session.save();
+  setTokens(req, res, tokens);
 
-  return { user, accessToken, refreshToken };
+  return { user, ...tokens };
 };

@@ -1,14 +1,11 @@
 import { UserResolvers } from "#graphql/User/types";
+import { clearTokens } from "#utils/cookie";
 
 export const logoutUser: UserResolvers["Mutation"]["logoutUser"] = async (
   _,
   __,
-  { req },
+  { res },
 ) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
+  clearTokens(res);
   return true;
 };

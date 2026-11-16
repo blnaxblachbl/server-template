@@ -20,11 +20,11 @@ export const createContext = ({
 }: ExpressContextFunctionArgument): Promise<Context> => {
   const { authorization } = req.headers;
   const apiKey = req.headers["x-api-key"] as string | undefined;
-  const sessionToken = req.session.accessToken;
+  const { accessToken, refreshToken } = req.cookies;
   let token = "";
 
-  if (sessionToken) {
-    token = sessionToken;
+  if (accessToken) {
+    token = accessToken;
   } else if (authorization) {
     token = authorization.replace("Bearer ", "") || "";
   }
@@ -36,6 +36,6 @@ export const createContext = ({
     res,
     apiKey,
     verify,
-    refreshToken: req.session.refreshToken,
+    refreshToken,
   });
 };

@@ -5,6 +5,7 @@ import { generateAllTokens } from "#utils/token/generate";
 import { USER_FIELDS } from "#utils/constants";
 import { verifyRefreshToken } from "#utils/token/verify";
 import { refreshTokenSchema } from "#utils/zod-schemas/user";
+import { setTokens } from "#utils/cookie";
 
 export async function refreshToken(req: Request, res: Response) {
   const { prisma, verify, refreshToken } = await createContext({ req, res });
@@ -30,16 +31,13 @@ export async function refreshToken(req: Request, res: Response) {
     if (!user || user.deleted) {
       return res.status(404).json({ message: "User not found" });
     }
-    const { accessToken, refreshToken: newRefreshToken } = generateAllTokens({
+    const tokens = generateAllTokens({
       id: user.id,
       email: user.email,
     });
 
-    req.session.accessToken = accessToken;
-    req.session.refreshToken = newRefreshToken;
-    req.session.save();
-
-    res.json({ user, accessToken, refreshToken: newRefreshToken });
+    setTokens(req, res, tokens);
+    res.json({ user, ...tokens });
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Internal Server Error" });

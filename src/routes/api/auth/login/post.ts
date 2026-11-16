@@ -5,6 +5,7 @@ import { createContext } from "#utils/context";
 import { USER_FIELDS } from "#utils/constants";
 import { generateAllTokens } from "#utils/token/generate";
 import { loginSchema } from "#utils/zod-schemas/user";
+import { setTokens } from "#utils/cookie";
 
 export async function loginUser(
   req: Request<any, any, { email: string; password: string }>,
@@ -30,16 +31,13 @@ export async function loginUser(
       return res.status(403).json({ message: "Invalid credentials" });
     }
     const { password: _userPassword, ...userData } = user;
-    const { accessToken, refreshToken } = generateAllTokens({
+    const tokens = generateAllTokens({
       id: userData.id,
       email: userData.email,
     });
 
-    req.session.accessToken = accessToken;
-    req.session.refreshToken = refreshToken;
-    req.session.save();
-
-    return res.json({ user: userData, accessToken, refreshToken });
+    setTokens(req, res, tokens);
+    return res.json({ user: userData, ...tokens });
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Internal Server Error" });
