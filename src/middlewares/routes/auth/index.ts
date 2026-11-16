@@ -13,7 +13,7 @@ export const authMiddleware = async (
   if (!context.apiKey && !context.verify) {
     return res.status(401).json({ message: "Api key or token not provided" });
   }
-  if (context.apiKey && context.apiKey !== ENV.REST_API_KEY) {
+  if (context.apiKey && context.apiKey !== ENV.API_KEY) {
     return res.status(401).json({ message: "Invalid API key" });
   }
   if (context.verify && context.verify.expired) {

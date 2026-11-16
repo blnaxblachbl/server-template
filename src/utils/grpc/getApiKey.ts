@@ -8,7 +8,7 @@ export async function getApiKeyFromGrpc(metadata: Metadata): Promise<{
   code: status;
 }> {
   const [apiKey] = metadata.get("api-key");
-  if (apiKey !== ENV.REST_API_KEY) {
+  if (apiKey !== ENV.API_KEY) {
     return {
       success: false,
       error: "No API key provided",

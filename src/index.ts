@@ -56,7 +56,7 @@ import { ENV } from "#utils/config";
         return {
           path: "/",
           httpOnly: true,
-          secure: req.secure || false,
+          secure: req.secure,
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, as refreshToken
         };
       },
